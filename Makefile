@@ -27,6 +27,7 @@ all:
 
 	$(GPP) $(CPP_SOURCE)/zx/Memory/Utilities.cpp -o $(BUILD_CPP_SOURCE)/memory_utilities.o
 	$(GPP) $(CPP_SOURCE)/zx/Memory/String.cpp -o $(BUILD_CPP_SOURCE)/memory_string.o
+	$(GPP) $(CPP_SOURCE)/zx/Memory/Heap.cpp -o $(BUILD_CPP_SOURCE)/memory_heap.o
 
 	$(GPP) $(CPP_SOURCE)/zx/Multiboot2/Tags.cpp -o $(BUILD_CPP_SOURCE)/multiboot2_tags.o
 
@@ -41,7 +42,7 @@ all:
 
 # link
 	$(LD) $(BUILD_ASM_SOURCE)/multiboot2.o $(BUILD_ASM_SOURCE)/setup.o \
-		$(BUILD_CPP_SOURCE)/memory_utilities.o $(BUILD_CPP_SOURCE)/memory_string.o \
+		$(BUILD_CPP_SOURCE)/memory_utilities.o $(BUILD_CPP_SOURCE)/memory_string.o $(BUILD_CPP_SOURCE)/memory_heap.o \
 		$(BUILD_CPP_SOURCE)/vga_color.o $(BUILD_CPP_SOURCE)/vga_output.o \
 		$(BUILD_CPP_SOURCE)/panic.o \
 		$(BUILD_CPP_SOURCE)/permissions_gdt.o \
