@@ -10,8 +10,6 @@ Handles heap memory allocation
 #include "Integers.hpp"
 #include "Functions.hpp"
 
-#include "Panic.hpp"
-
 namespace Memory {
     struct MemoryBlock {
         void* ptr;

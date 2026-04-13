@@ -7,7 +7,7 @@ Handles heap memory allocation
 
 #include "Integers.hpp"
 #include "Functions.hpp"
-#include "Panic.hpp"
+#include "zx/Panic.hpp"
 
 #include "zx/Memory/Heap.hpp"
 
