@@ -11,6 +11,7 @@ Macros that should simplify function definition
 #define private static
 #define replace inline
 #define function
+#define no_discard [[nodiscard]]
 
 #ifdef _MSC_VER
     #define self_clean __stdcall

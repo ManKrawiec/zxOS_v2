@@ -21,6 +21,8 @@ Handles initialization, connects all other code together
 
 #include "zx/Panic.hpp"
 
+#include "zx/Memory/Heap.hpp"
+
 function no_mangle return_type(void) self_clean KernelMain(
     u32 multiboot2_ident,
     uptr multiboot2_address
@@ -76,6 +78,10 @@ function no_mangle return_type(void) self_clean KernelMain(
     __asm__ volatile("sti");
 
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Warn, "Enabled interrupts\n");
+
+    Memory::MemoryBlock block = Memory::Allocate(1020);
+    Memory::Free(block);
+    Memory::Allocate(100);
 
     for (;;) {
         __asm__ volatile("hlt");

@@ -17,7 +17,7 @@ namespace Memory {
         size start;
     };
 
-    function return_type(MemoryBlock) Allocate(size n);
+    function no_discard return_type(MemoryBlock) Allocate(size n);
     function return_type(void) Free(MemoryBlock block);
     function return_type(void) Defragment();
 }

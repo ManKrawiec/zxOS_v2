@@ -15,11 +15,19 @@ u32 Space[256] = {0}; // 256 * 4 = 1KB
 bool Used[256] = {false};
 
 namespace Memory {
-    function return_type(MemoryBlock) Allocate(size n) {
+    function no_discard return_type(MemoryBlock) Allocate(size n) {
         // get 4-byte aligned 
         size amount = (n + 3) / 4;
 
-        for (size i = 0; i < 256 - amount; i++) {
+        if (amount > 256) {
+            Panic::Common(
+                "Allocation too large",
+                "Requested allocation exceeds heap capacity."
+            );
+            return { nullptr, 0, 0 };
+        }
+
+        for (size i = 0; i < 255 - amount; i++) {
             bool can_use = true;
             for (size j = 0; j < amount; j++) {
                 if (Used[j + i] == true) {
@@ -49,7 +57,9 @@ namespace Memory {
     }
 
     function return_type(void) Free(MemoryBlock block) {
-        if (block.ptr == nullptr) return;
+        if (block.ptr == nullptr) {
+            Panic::Common("Invalid free", "Can not free an invalid block.");
+        };
         if (block.start + block.amount > 256) {
             Panic::Common("Heap corruption", "Invalid free detected.");
             return;
