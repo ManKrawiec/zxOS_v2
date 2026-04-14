@@ -58,8 +58,6 @@ extern "C" void __attribute__((stdcall)) KernelMain(
 
     Multiboot2::Tags::Tag* tag = (Multiboot2::Tags::Tag*)(multiboot2_address);
 
-    Debug::Output("-4");
-
     for (
         ; 
         tag->type != Multiboot2::Tags::Types::End;
@@ -68,13 +66,9 @@ extern "C" void __attribute__((stdcall)) KernelMain(
         Multiboot2::Tags::Parse(tag);
     }
 
-    Debug::Output("-3");
-
     GDT::DefaultInitialize();
 
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Ok, "Initialized GDT\n");
-
-    Debug::Output("-2");
 
     IDT::DefaultInitialize();
 
@@ -82,21 +76,15 @@ extern "C" void __attribute__((stdcall)) KernelMain(
 
     PIC::Remap(0x20, 0x28);
 
-    Debug::Output("-1");
-
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Ok, "Remapped PIC\n");
     
     for (size irq = 0; irq < 15; irq++) {
         PIC::IRQ::SetMask(irq);
     }
 
-    Debug::Output("0");
-
     PIC::IRQ::ClearMask(2);
 
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Warn, "Enabled interrupts\n");
-
-    Debug::Output("1");
 
     static char buf2[8];
     u32 target = Memory::BlockAmount * 4;
@@ -105,12 +93,8 @@ extern "C" void __attribute__((stdcall)) KernelMain(
     VGA::Output(buf2, VGA::Color::ProcessColor(VGA::Color::Colors::LightCyan, VGA::Color::Colors::Black));
     VGA::Output("B\n", 0x07);
 
-    Debug::Output("2");
-
     Keyboard::Initialize();
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Ok, "Initialized keyboard\n");
-
-    Debug::Output("3");
 
     asm volatile("sti");
 
