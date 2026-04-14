@@ -8,7 +8,6 @@ Header for Color.cpp and usage of colors
 #pragma once
 
 #include "Integers.hpp"
-#include "Functions.hpp"
 
 namespace VGA {
     namespace Color {
@@ -31,6 +30,6 @@ namespace VGA {
             White
         };
         
-        function return_type(u8) ProcessColor(Colors foreground, Colors background);
+        u8 ProcessColor(Colors foreground, Colors background);
     }
 }

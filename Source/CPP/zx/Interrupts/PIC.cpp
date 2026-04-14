@@ -13,7 +13,6 @@ Handles remapping the Programmable Interrrupt Controller and EOI
 0xA1 - slave data
 */
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 #include "zx/Ports/IO.hpp"
@@ -55,13 +54,13 @@ namespace PIC {
         u16 CascadeIRQ = 2;
     }
 
-    function return_type(void) SendEOI(u8 irq) {
+    void SendEOI(u8 irq) {
         if (irq >= 8)
             IO::Output::Byte(Commands::PIC2::Command, Commands::PIC::EOI);
         IO::Output::Byte(Commands::PIC1::Command, Commands::PIC::EOI);
     }
 
-    function return_type(void) Remap(i32 offset_1, i32 offset_2) {
+    void Remap(i32 offset_1, i32 offset_2) {
         IO::Output::Byte(
             Commands::PIC1::Command, 
             Commands::ICW1::Init | Commands::ICW1::ICW4
@@ -130,7 +129,7 @@ namespace PIC {
     }
     
     namespace IRQ {
-        function return_type(void) SetMask(u8 IRQline) {
+        void SetMask(u8 IRQline) {
             u16 port;
             u8 value;
 
@@ -145,7 +144,7 @@ namespace PIC {
             IO::Output::Byte(port, value);        
         }
 
-        function return_type(void) ClearMask(u8 IRQline) {
+        void ClearMask(u8 IRQline) {
             u16 port;
             u8 value;
 

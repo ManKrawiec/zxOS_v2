@@ -8,7 +8,6 @@ Permissions (This code sets Ring0 to the whole kernel and OS!)
 #include "zx/Permissions/GDT.hpp"
 
 #include "Integers.hpp"
-#include "Functions.hpp"
 
 #include "zx/VGA/Output.hpp"
 #include "zx/VGA/Color.hpp"
@@ -16,7 +15,7 @@ Permissions (This code sets Ring0 to the whole kernel and OS!)
 namespace GDT {
     u64 gdt_entries[3];
 
-    function return_type(void) Encode(u8* target, Entry source) {
+    void Encode(u8* target, Entry source) {
         /*
         Entry:
         bits 0..15 : Limit (bytes 0 - 1)
@@ -45,7 +44,7 @@ namespace GDT {
         target[6] |= (source.flags << 4);
     }
 
-    function return_type(void) DefaultInitialize() {
+    void DefaultInitialize() {
         /*
         Flags (4 bits in 1 byte):
 

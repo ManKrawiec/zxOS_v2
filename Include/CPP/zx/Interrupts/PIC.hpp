@@ -15,15 +15,14 @@ Header for PIC.cpp
 
 #pragma once
 
-#include "Functions.hpp"
 #include "Integers.hpp"
  
 namespace PIC {
-    function return_type(void) SendEOI(u8 irq);
-    function return_type(void) Remap(i32 offset_1, i32 offset_2);
+    void SendEOI(u8 irq);
+    void Remap(i32 offset_1, i32 offset_2);
     
     namespace IRQ {
-        function return_type(void) SetMask(u8 IRQline);
-        function return_type(void) ClearMask(u8 IRQline);
+        void SetMask(u8 IRQline);
+        void ClearMask(u8 IRQline);
     }
 }

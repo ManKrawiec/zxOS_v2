@@ -8,7 +8,6 @@ Tag parsing and identifiers for Multiboot2
 
 #pragma once
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 namespace Multiboot2 {
@@ -21,13 +20,13 @@ namespace Multiboot2 {
             extern const u32 Framebuffer;
         }
 
-        struct Tag {
+        struct __attribute__((packed)) Tag {
             u32 type;
             u32 size;
         };
 
         namespace CLI {
-            struct Tag {
+            struct __attribute__((packed)) Tag {
                 u32 type;   // 1
                 u32 size;
                 char str[];
@@ -35,7 +34,7 @@ namespace Multiboot2 {
         }
 
         namespace Bootloader {
-            struct Tag {
+            struct __attribute__((packed)) Tag {
                 u32 type;   // 2
                 u32 size;
                 char str[];
@@ -43,14 +42,14 @@ namespace Multiboot2 {
         }
 
         namespace MemoryMap {
-            struct Entry {
+            struct __attribute__((packed)) Entry {
                 u64 base_addr;
                 u64 len;
                 u32 type;
                 u32 reserved;
             };
 
-            struct Tag {
+            struct __attribute__((packed)) Tag {
                 u32 type;   // 6
                 u32 size;
                 u32 entry_size;
@@ -60,7 +59,7 @@ namespace Multiboot2 {
         }
 
         namespace Framebuffer {
-            struct Tag {
+            struct __attribute__((packed)) Tag {
                 u32 type;   // 8
                 u32 size;
                 u64 framebuffer_addr;
@@ -78,7 +77,7 @@ namespace Multiboot2 {
             };
         }
 
-        function return_type(void) Parse(Multiboot2::Tags::Tag* general_tag);
+        void Parse(Multiboot2::Tags::Tag* general_tag);
     }
 
    namespace Container {

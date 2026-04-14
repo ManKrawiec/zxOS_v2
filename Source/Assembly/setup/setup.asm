@@ -19,6 +19,10 @@ _start:
     push ebx
     push eax
 
+    mov eax, STACK_SIZE
+
+    push eax
+
     call KernelMain ; C++ function
 
     jmp _end

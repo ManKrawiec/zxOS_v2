@@ -5,7 +5,6 @@
 Tag parsing and identifiers for Multiboot2
 */
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 #include "zx/Multiboot2/Tags.hpp"
 
@@ -29,7 +28,7 @@ namespace Multiboot2 {
             constexpr u32 Framebuffer = 8;
         }
 
-        function return_type(void) Parse(Multiboot2::Tags::Tag* general_tag) {
+        void Parse(Multiboot2::Tags::Tag* general_tag) {
             switch (general_tag->type) {
                 case Multiboot2::Tags::Types::CLI:
                     Multiboot2::Container::cli 

@@ -5,7 +5,6 @@
 Handles kernel panic
 */
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 #include "zx/VGA/Color.hpp"
@@ -14,7 +13,7 @@ Handles kernel panic
 #include "zx/Memory/String.hpp"
 
 namespace Panic {
-    function return_type(void) no_return Common(
+    void __attribute__((noreturn)) Common(
         const char* title,
         const char* description
     ) {
@@ -64,14 +63,14 @@ namespace Panic {
         static char buf[8];
         String::Convert::IntegerToASCII(buf, eip);
         VGA::Output("Instruction Pointer (base 10): ", VGA::Color::ProcessColor(VGA::Color::Colors::Gray, VGA::Color::Colors::Black));
-        VGA::Output(buf, VGA::Color::ProcessColor(VGA::Color::Colors::Cyan, VGA::Color::Colors::Black));
-        VGA::Output("\n", 0);
+        VGA::Output(buf, VGA::Color::ProcessColor(VGA::Color::Colors::LightCyan, VGA::Color::Colors::Black));
+        VGA::Output("B\n", 0x07);
 
         static char buf2[8];
         String::Convert::IntegerToASCII(buf2, esp);
         VGA::Output("Stack Pointer (base 10): ", VGA::Color::ProcessColor(VGA::Color::Colors::Gray, VGA::Color::Colors::Black));
-        VGA::Output(buf2, VGA::Color::ProcessColor(VGA::Color::Colors::Cyan, VGA::Color::Colors::Black));
-        VGA::Output("\n", 0);
+        VGA::Output(buf2, VGA::Color::ProcessColor(VGA::Color::Colors::LightCyan, VGA::Color::Colors::Black));
+        VGA::Output("B\n", 0x07);
 
         VGA::Output("Kernel Code Selector: 0x08\n", VGA::Color::ProcessColor(VGA::Color::Colors::Gray, VGA::Color::Colors::Black));
         VGA::Output("Kernel Data Selector: 0x10\n", VGA::Color::ProcessColor(VGA::Color::Colors::Gray, VGA::Color::Colors::Black));

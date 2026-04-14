@@ -1,23 +1,24 @@
-// Heap.cpp
+// Heap.hpp
 // Written by TechEverything
 
 /*
-Handles heap memory allocation
+Header for heap memory allocation
 */
 
 #pragma once
 
 #include "Integers.hpp"
-#include "Functions.hpp"
 
 namespace Memory {
+    constexpr u32 BlockAmount = 4096;
+
     struct MemoryBlock {
         void* ptr;
         size amount;
         size start;
     };
 
-    function no_discard return_type(MemoryBlock) Allocate(size n);
-    function return_type(void) Free(MemoryBlock block);
-    function return_type(void) Defragment();
+    MemoryBlock Allocate(size n);
+    void Free(MemoryBlock block);
+    void Defragment();
 }

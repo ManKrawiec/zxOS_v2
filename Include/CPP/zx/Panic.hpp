@@ -7,7 +7,6 @@ Header for Panic.cpp
 
 #pragma once
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 #include "zx/VGA/Color.hpp"

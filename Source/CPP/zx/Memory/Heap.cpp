@@ -6,28 +6,27 @@ Handles heap memory allocation
 */
 
 #include "Integers.hpp"
-#include "Functions.hpp"
 #include "zx/Panic.hpp"
 
 #include "zx/Memory/Heap.hpp"
 
-u32 Space[256] = {0}; // 256 * 4 = 1KB
-bool Used[256] = {false};
+u32 Space[Memory::BlockAmount] = {0}; // 256 * 4 = 1KB
+bool Used[Memory::BlockAmount] = {false};
 
 namespace Memory {
-    function no_discard return_type(MemoryBlock) Allocate(size n) {
+    MemoryBlock __attribute__((nodiscard)) Allocate(size n) {
         // get 4-byte aligned 
         size amount = (n + 3) / 4;
 
-        if (amount > 256) {
+        if (amount > BlockAmount) {
             Panic::Common(
                 "Allocation too large",
                 "Requested allocation exceeds heap capacity."
             );
-            return { nullptr, 0, 0 };
+            return {nullptr, 0, 0};
         }
 
-        for (size i = 0; i < 255 - amount; i++) {
+        for (size i = 0; i <= BlockAmount - amount; i++) {
             bool can_use = true;
             for (size j = 0; j < amount; j++) {
                 if (Used[j + i] == true) {
@@ -56,11 +55,11 @@ namespace Memory {
         return block;
     }
 
-    function return_type(void) Free(MemoryBlock block) {
+    void Free(MemoryBlock block) {
         if (block.ptr == nullptr) {
             Panic::Common("Invalid free", "Can not free an invalid block.");
         };
-        if (block.start + block.amount > 256) {
+        if (block.start + block.amount > BlockAmount) {
             Panic::Common("Heap corruption", "Invalid free detected.");
             return;
         }
@@ -69,9 +68,9 @@ namespace Memory {
         }
     }
 
-    function return_type(void) Defragment() {
+    void Defragment() {
         // just mark everything clear lol
-        for (size i = 0; i < 256; i++) {
+        for (size i = 0; i < BlockAmount; i++) {
             Used[i] = false;
         }
     }

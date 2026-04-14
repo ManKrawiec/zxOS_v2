@@ -5,7 +5,6 @@
 Handles Interrupt Descriptor Table set up
 */
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 #include "zx/VGA/Color.hpp"
@@ -30,7 +29,7 @@ namespace IDT {
     Entry entries[256];
     IDTR idtr;
 
-    function return_type(void) SetEntry(u16 index, u32 base, u16 selector, u8 flags) {
+    void SetEntry(u16 index, u32 base, u16 selector, u8 flags) {
         // zero
         entries[index].zero = 0;
 
@@ -45,7 +44,7 @@ namespace IDT {
         entries[index].type_attributes = flags;
     }
 
-    function return_type(void) DefaultInitialize() {
+    void DefaultInitialize() {
         for (u16 i = 0; i < 256; i++) {
             if (isr_table[i] != 0) {
                 SetEntry(i, isr_table[i], 0x08, 0b10001110);

@@ -5,11 +5,10 @@
 String utilities for zxOS
 */
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 namespace String {
-    function return_type(void) Copy(
+    void Copy(
         char* dest, const char* src
     ) {
         while (*src) {
@@ -21,7 +20,7 @@ namespace String {
         *dest = '\0';
     }
 
-    function return_type(bool) Equals(
+    bool Equals(
         const char* src1, const char* src2
     ) {
         while (*src1 && *src2) {
@@ -33,7 +32,7 @@ namespace String {
         return *src1 == *src2;
     }
 
-    function return_type(void) Reverse(char* dest, const char* src, size len) {
+    void Reverse(char* dest, const char* src, size len) {
         if (len == 0) {
             dest[0] = '\0';
             return;
@@ -47,17 +46,17 @@ namespace String {
     }
 
     namespace Check {
-        function return_type(bool) IsNumber(char c) {
+        bool IsNumber(char c) {
             return (c >= '0') && (c <= '9');
         }
     }
 
     namespace Convert {
-        function return_type(u8) CharToNumber(char c) {
+        u8 CharToNumber(char c) {
             return c - '0';
         }
 
-        function return_type(i32) ASCIIToInteger(
+        i32 ASCIIToInteger(
             const char* src
         ) {
             i32 number = 0;
@@ -82,7 +81,7 @@ namespace String {
             return number;
         }
 
-        function return_type(void) IntegerToASCII(
+        void IntegerToASCII(
             char* dest, i32 src
         ) {
             if (src == 0) {

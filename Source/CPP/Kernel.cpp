@@ -6,7 +6,6 @@ Handles initialization, connects all other code together
 */
 
 #include "Integers.hpp"
-#include "Functions.hpp"
 
 #include "zx/Multiboot2/Magic.hpp"
 #include "zx/Multiboot2/Tags.hpp"
@@ -20,14 +19,25 @@ Handles initialization, connects all other code together
 #include "zx/Interrupts/PIC.hpp"
 
 #include "zx/Panic.hpp"
+#include "zx/Debug.hpp"
 
 #include "zx/Memory/Heap.hpp"
+#include "zx/Memory/String.hpp"
 
-function no_mangle return_type(void) self_clean KernelMain(
-    u32 multiboot2_ident,
+#include "zx/Drivers/Keyboard.hpp"
+
+extern "C" void __attribute__((stdcall)) KernelMain(
+    uptr stack_size,
+    uptr multiboot2_ident,
     uptr multiboot2_address
 ) {
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Info, "Initializing system\n");
+
+    static char buf[8];
+    String::Convert::IntegerToASCII(buf, stack_size);
+    VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Info, "Stack size: ");
+    VGA::Output(buf, VGA::Color::ProcessColor(VGA::Color::Colors::LightCyan, VGA::Color::Colors::Black));
+    VGA::Output("B\n", 0x07);
 
     if (multiboot2_ident != Multiboot2::Magic) {
         // invalid multiboot2 identifier
@@ -35,18 +45,20 @@ function no_mangle return_type(void) self_clean KernelMain(
         return;
     }
 
-    VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Info, "KernelMain() : Multiboot2 identifier is valid\n");
+    VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Info, "Multiboot2 identifier is valid\n");
 
     if (multiboot2_address & 7) {
         Panic::Common("Unaligned Multiboot2 address", "The Multiboot2 address is not aligned properly");
         return;
     }
 
-    VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Info, "KernelMain() : Multiboot2 address is aligned properly\n");
+    VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Info, "Multiboot2 address is aligned properly\n");
 
     multiboot2_address += 8;
 
     Multiboot2::Tags::Tag* tag = (Multiboot2::Tags::Tag*)(multiboot2_address);
+
+    Debug::Output("-4");
 
     for (
         ; 
@@ -56,9 +68,13 @@ function no_mangle return_type(void) self_clean KernelMain(
         Multiboot2::Tags::Parse(tag);
     }
 
+    Debug::Output("-3");
+
     GDT::DefaultInitialize();
 
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Ok, "Initialized GDT\n");
+
+    Debug::Output("-2");
 
     IDT::DefaultInitialize();
 
@@ -66,24 +82,39 @@ function no_mangle return_type(void) self_clean KernelMain(
 
     PIC::Remap(0x20, 0x28);
 
+    Debug::Output("-1");
+
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Ok, "Remapped PIC\n");
     
     for (size irq = 0; irq < 15; irq++) {
         PIC::IRQ::SetMask(irq);
     }
 
-    PIC::IRQ::ClearMask(2);
-    PIC::IRQ::ClearMask(1);
+    Debug::Output("0");
 
-    __asm__ volatile("sti");
+    PIC::IRQ::ClearMask(2);
 
     VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Warn, "Enabled interrupts\n");
 
-    Memory::MemoryBlock block = Memory::Allocate(1020);
-    Memory::Free(block);
-    Memory::Allocate(100);
+    Debug::Output("1");
+
+    static char buf2[8];
+    u32 target = Memory::BlockAmount * 4;
+    String::Convert::IntegerToASCII(buf2, target);
+    VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Info, "Heap size: ");
+    VGA::Output(buf2, VGA::Color::ProcessColor(VGA::Color::Colors::LightCyan, VGA::Color::Colors::Black));
+    VGA::Output("B\n", 0x07);
+
+    Debug::Output("2");
+
+    Keyboard::Initialize();
+    VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Ok, "Initialized keyboard\n");
+
+    Debug::Output("3");
+
+    asm volatile("sti");
 
     for (;;) {
-        __asm__ volatile("hlt");
+        asm volatile("hlt");
     }
 }

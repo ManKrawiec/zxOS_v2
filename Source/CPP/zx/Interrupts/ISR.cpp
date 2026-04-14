@@ -5,7 +5,6 @@
 Handles Interrupt Service Routine set up
 */
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 #include "zx/Interrupts/PIC.hpp"
@@ -34,7 +33,7 @@ struct Registers {
     u32 eip;
 };
 
-function no_mangle return_type(void) ISRHandler(Registers* regs) {
+extern "C" void ISRHandler(Registers* regs) {
     if (regs->int_no >= 32) {
         PIC::SendEOI(regs->int_no - 32);
     }

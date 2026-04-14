@@ -5,6 +5,8 @@
 0xB8000 VGA output
 */
 
+#include "Integers.hpp"
+
 #include "zx/VGA/Info.hpp"
 #include "zx/VGA/Output.hpp"
 #include "zx/VGA/Color.hpp"
@@ -13,15 +15,31 @@
 
 #include "zx/Ports/IO.hpp"
 
-#include "Integers.hpp"
-#include "Functions.hpp"
+#include "zx/Panic.hpp"
+
+#include "zx/Multiboot2/Tags.hpp"
 
 namespace VGA {
+
+    bool vga_draw = true;
+    bool in_panic = false;
+
     volatile char* Video = (volatile char*)(VGA::Address);
     u32 x = 0;
     u32 y = 0;
 
-    function return_type(void) UpdateCursor(u8 _x, u8 _y) {
+    void PanicIfDrawNotAllowed() {
+        if (in_panic == true) return;
+        if (vga_draw == false) {
+            in_panic = true;
+            Panic::Common(
+                "VGA Output is deprecated",
+                "VGA::___ is deprecated. Please replace it with Graphics::___"
+            );
+        }
+    }
+
+    void UpdateCursor(u8 _x, u8 _y) {
         u16 pos = _y * VGA::Width + _x;
 
         IO::Output::Byte(0x3D4, 0x0F);
@@ -30,7 +48,7 @@ namespace VGA {
         IO::Output::Byte(0x3D5, (u8)((pos >> 8) & 0xFF));
     }
 
-    function return_type(void) Scroll() {
+    void Scroll() {
         char* addr_target = (char*)VGA::Address;
         char* addr_start = (char*)(VGA::Address + (2 * (1 * VGA::Width + 0)));
 
@@ -43,7 +61,8 @@ namespace VGA {
         }
     }
 
-    function return_type(void) Output(const char* src, u8 color) {
+    void Output(const char* src, u8 color) {
+        PanicIfDrawNotAllowed();
         while (*src) {
             if (*src == '\n') {
                 y++;
@@ -76,9 +95,10 @@ namespace VGA {
     }
 
     namespace Complex {
-        function return_type(void) OutputStatusMessage(
+        void OutputStatusMessage(
             Status status, const char* message
         ) {
+            PanicIfDrawNotAllowed();
             switch (status) {
                 case Status::Ok:
                     Output("[", Color::ProcessColor(Color::Colors::White, Color::Colors::Black));
@@ -113,7 +133,7 @@ namespace VGA {
             }
         }
 
-        function return_type(void) ClearScreen(u8 color) {
+        void ClearScreen(u8 color) {
             for (size _y = 0; _y < VGA::Height; _y++) {
                 for (size _x = 0; _x < VGA::Width; _x++) {
                     Video[2 * (_y * VGA::Width + _x)] = ' ';

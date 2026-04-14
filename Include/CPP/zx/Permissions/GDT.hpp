@@ -7,7 +7,6 @@ Header for GDT.cpp
 
 #pragma once
 
-#include "Functions.hpp"
 #include "Integers.hpp"
 
 namespace GDT {
@@ -23,5 +22,5 @@ namespace GDT {
         uptr base;
     };
 
-    function return_type(void) DefaultInitialize();
+    void DefaultInitialize();
 }

@@ -35,16 +35,19 @@ all:
 
 	$(GPP) $(CPP_SOURCE)/zx/Interrupts/IDT.cpp -o $(BUILD_CPP_SOURCE)/interrupts_idt.o
 	$(GPP) $(CPP_SOURCE)/zx/Interrupts/ISR.cpp -o $(BUILD_CPP_SOURCE)/interrupts_isr.o
-
 	$(GPP) $(CPP_SOURCE)/zx/Interrupts/PIC.cpp -o $(BUILD_CPP_SOURCE)/interrupts_pic.o
 
+	$(GPP) $(CPP_SOURCE)/zx/Drivers/Keyboard.cpp -o $(BUILD_CPP_SOURCE)/drivers_keyboard.o
+
 	$(GPP) $(CPP_SOURCE)/zx/Panic.cpp -o $(BUILD_CPP_SOURCE)/panic.o
+	$(GPP) $(CPP_SOURCE)/zx/Debug.cpp -o $(BUILD_CPP_SOURCE)/debug.o
 
 # link
 	$(LD) $(BUILD_ASM_SOURCE)/multiboot2.o $(BUILD_ASM_SOURCE)/setup.o \
 		$(BUILD_CPP_SOURCE)/memory_utilities.o $(BUILD_CPP_SOURCE)/memory_string.o $(BUILD_CPP_SOURCE)/memory_heap.o \
+		$(BUILD_CPP_SOURCE)/drivers_keyboard.o \
 		$(BUILD_CPP_SOURCE)/vga_color.o $(BUILD_CPP_SOURCE)/vga_output.o \
-		$(BUILD_CPP_SOURCE)/panic.o \
+		$(BUILD_CPP_SOURCE)/panic.o $(BUILD_CPP_SOURCE)/debug.o \
 		$(BUILD_CPP_SOURCE)/permissions_gdt.o \
 		$(BUILD_ASM_SOURCE)/isr.o \
 		$(BUILD_CPP_SOURCE)/interrupts_idt.o $(BUILD_CPP_SOURCE)/interrupts_isr.o \
