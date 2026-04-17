@@ -80,7 +80,7 @@ extern "C" void __attribute__((stdcall)) KernelMain(
 
     Graphics::Console::Status::Output(Graphics::Console::Status::Type::Info, "Stack size: ");
     Graphics::Console::OutputString({0, 170, 170}, _stack_size);
-    Graphics::Console::OutputString({0, 0, 0}, "B\n");
+    Graphics::Console::OutputString({0, 170, 170}, "B\n");
 
     GDT::DefaultInitialize();
 
@@ -111,7 +111,7 @@ extern "C" void __attribute__((stdcall)) KernelMain(
     //VGA::Output("B\n", 0x07);
     Graphics::Console::Status::Output(Graphics::Console::Status::Type::Info, "Heap size: ");
     Graphics::Console::OutputString({0, 170, 170}, _heap_size);
-    Graphics::Console::OutputString({0, 0, 0}, "B\n");
+    Graphics::Console::OutputString({0, 170, 170}, "B\n");
 
     Keyboard::Initialize();
     //VGA::Complex::OutputStatusMessage(VGA::Complex::Status::Ok, "Initialized keyboard\n");
