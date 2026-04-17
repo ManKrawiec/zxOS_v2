@@ -198,10 +198,7 @@ namespace Keyboard {
                 }
 
             } else {
-                Panic::Common(
-                    "Unsupported keyboard scancode",
-                    "An unknown scancode was attempted to be processed by event handler"
-                );
+                return;
             }
 
         } else {
@@ -227,10 +224,7 @@ namespace Keyboard {
                 }
 
             } else {
-                Panic::Common(
-                    "Unsupported keyboard scancode",
-                    "An unknown scancode was attempted to be processed by event handler"
-                );
+                return;
             }
         }
 

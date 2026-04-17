@@ -17,7 +17,7 @@ Console for Framebuffer mode
 namespace Graphics {
     namespace Console {
         void PutCharacter(Point pos, Color col, char character) {
-            Bitmap::Draw(pos, col, 8, true, Assets::Fonts::BitFont[character]);
+            Bitmap::Draw(pos, col, Assets::Fonts::BitFont::Height, true, Assets::Fonts::BitFont::Font[character]);
         }
 
         u32 x = desired_distancing_x;

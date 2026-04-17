@@ -12,6 +12,10 @@ Header for Basic.cpp
 
 namespace Graphics {
     namespace Basic {
+        struct Snapshot {
+            Point size;
+            u8* region;
+        };
         void DrawPixel(Point pos, Color color);
         void DrawRect(Point pos, Point _size, Color color);
         void ClearScreen(Color color);

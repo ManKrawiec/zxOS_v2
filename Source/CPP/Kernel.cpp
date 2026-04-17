@@ -29,8 +29,10 @@ Handles initialization, connects all other code together
 #include "zx/Graphics/Basic.hpp"
 #include "zx/Graphics/Bitmap.hpp"
 #include "zx/Graphics/Console.hpp"
+#include "zx/Graphics/Bytemap.hpp"
 
 #include "zx/Assets/Fonts/BitFont.hpp"
+#include "zx/Assets/Cursors/ByteCursor.hpp"
 
 extern "C" void __attribute__((stdcall)) KernelMain(
     uptr stack_size,

@@ -13,6 +13,8 @@ Handles Interrupt Service Routine set up
 
 #include "zx/Drivers/Keyboard.hpp"
 
+#include "zx/Ports/IO.hpp"
+
 struct Registers {
     u32 gs; 
     u32 fs; 

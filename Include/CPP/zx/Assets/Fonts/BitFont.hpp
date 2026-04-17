@@ -11,6 +11,9 @@ Header for BitFont.cpp
 
 namespace Assets {
     namespace Fonts {
-        extern u8 BitFont[128][8];
+        namespace BitFont {
+            extern u8 Height;
+            extern u8 Font[128][8];
+        }
     }
 }

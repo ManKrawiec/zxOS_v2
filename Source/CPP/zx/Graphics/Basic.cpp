@@ -11,6 +11,9 @@ Basic functions (pixel drawing, rect drawing)
 
 #include "zx/Graphics/Color.hpp"
 #include "zx/Graphics/Point.hpp"
+#include "zx/Graphics/Basic.hpp"
+
+#include "zx/Memory/Utilities.hpp"
 
 namespace Graphics {
     namespace Basic {
